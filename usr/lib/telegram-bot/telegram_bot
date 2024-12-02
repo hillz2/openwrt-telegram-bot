@@ -2,11 +2,11 @@
 
 PATH='/usr/bin:/usr/sbin:/bin:/sbin'
 
-token=$(uci get telegram_bot.config.bot_token 2>/dev/nul)
-chat_id=$(uci get telegram_bot.config.chat_id 2>/dev/nul)
-server=$(uci get telegram_bot.config.server 2>/dev/nul)
-timeout=$(uci get telegram_bot.config.timeout 2>/dev/nul)
-polling_time=$(uci get telegram_bot.config.polling_time 2>/dev/nul)
+token=$(uci get telegram-bot.config.bot_token 2>/dev/nul)
+chat_id=$(uci get telegram-bot.config.chat_id 2>/dev/nul)
+server=$(uci get telegram-bot.config.server 2>/dev/nul)
+timeout=$(uci get telegram-bot.config.timeout 2>/dev/nul)
+polling_time=$(uci get telegram-bot.config.polling_time 2>/dev/nul)
 
 if [ -z "$token" ]; then
 	echo "token is empty"
