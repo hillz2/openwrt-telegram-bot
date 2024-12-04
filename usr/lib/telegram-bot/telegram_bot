@@ -47,8 +47,7 @@ Commands are words beginning with a slash.
 Try it !
 Send [/start](/start) to get my commands list."
 
-command_start="*/memory* return RAM info
-*/free* RAM & Disk space
+command_start="*/free* RAM & Disk space
 */uptime* Uptime of the device
 */vnstat* Check bandwidth usage
 */ping_log* Check /tmp/ping.log
@@ -58,7 +57,8 @@ command_start="*/memory* return RAM info
 */reboot* Reboot the device
 */<script_name>* any scripts in the \`plugins\` directory"
 
-curl -k -m 3 -s -X POST $api/sendMessage -d chat_id=$chat_id --data-urlencode text="Router started." &> $telegram_log_file
+device_name=$(cat /tmp/sysinfo/model)
+curl -k -m 3 -s -X POST $api/sendMessage -d chat_id=$chat_id --data-urlencode text="Router started: ${device_name}" &> $telegram_log_file
 
 if [ -f "$offset_file" ] ; then
 	offset=$( cat $offset_file )
