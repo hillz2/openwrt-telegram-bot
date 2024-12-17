@@ -47,15 +47,15 @@ Commands are words beginning with a slash.
 Try it !
 Send [/start](/start) to get my commands list."
 
-command_start="*/free* RAM & Disk space
-*/uptime* Uptime of the device
-*/vnstat* Check bandwidth usage
-*/ping_log* Check /tmp/ping.log
-*/list_inbox* Show SMS inbox
-*/modem_info* Modem info
-*/crypto* Check your crypto investment
-*/reboot* Reboot the device
-*/<script_name>* any scripts in the \`plugins\` directory"
+command_start="/cloudflared_log - cloudflared log
+/crypto - Check your crypto investment
+/free - Free RAM & disk space
+/list_inbox - List inbox
+/modem_info - Modem info
+/restart_cloudflared - Restart cloudflared
+/uptime - Router uptime
+/vnstat - vnstat statistics
+*/<script_name> - any scripts in the \`plugins\` directory"
 
 device_name=$(cat /tmp/sysinfo/model)
 curl -k -m 3 -s -X POST $api/sendMessage -d chat_id=$chat_id --data-urlencode text="Router started: ${device_name}" &> $telegram_log_file
