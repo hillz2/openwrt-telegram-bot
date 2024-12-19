@@ -49,7 +49,7 @@ Send [/start](/start) to get my commands list."
 
 command_start="/cloudflared_log - cloudflared log
 /crypto - Check your crypto investment
-/free - Free RAM & disk space
+/router_info - Router info
 /list_inbox - List inbox
 /modem_info - Modem info
 /restart_cloudflared - Restart cloudflared
