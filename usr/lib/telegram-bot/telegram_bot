@@ -111,8 +111,12 @@ do
 							reply_to_msg $msg_id $origin "\${RETURN_TEXT}" && sleep 5 && reboot
 							;;
 						(*)
-							if [ -f "${plugins}/${cmd}.sh" ] ; then
-								(echo "Call $cmd [$parms]" | logger -t "telegram_bot" -p daemon.info) && RETURN_TEXT=$(${plugins}/${cmd}.sh ${parms})
+							if [ -f "${plugins}/${cmd}.sh" ] || [ -f "${plugins}/${cmd}.py" ]; then
+								if [ -f "${plugins}/${cmd}.sh" ]; then
+									(echo "Call $cmd [$parms]" | logger -t "telegram_bot" -p daemon.info) && RETURN_TEXT=$(${plugins}/${cmd}.sh ${parms})
+								elif [ -f "${plugins}/${cmd}.py" ]; then
+									(echo "Call $cmd [$parms]" | logger -t "telegram_bot" -p daemon.info) && RETURN_TEXT=$(${plugins}/${cmd}.py ${parms})
+								fi
 							else
 								RETURN_TEXT="Command *${cmd}* not found!"
 							fi
