@@ -53,7 +53,6 @@ command_start="/cloudflared_log - cloudflared log
 /list_inbox - List inbox
 /modem_info - Modem info
 /restart_cloudflared - Restart cloudflared
-/uptime - Router uptime
 /vnstat - vnstat statistics
 /weather - fetch weather forecast from BMKG
 */<script_name> - any scripts in the \`plugins\` directory"
