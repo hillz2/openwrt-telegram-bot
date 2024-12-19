@@ -55,6 +55,7 @@ command_start="/cloudflared_log - cloudflared log
 /restart_cloudflared - Restart cloudflared
 /uptime - Router uptime
 /vnstat - vnstat statistics
+/weather - fetch weather forecast from BMKG
 */<script_name> - any scripts in the \`plugins\` directory"
 
 device_name=$(cat /tmp/sysinfo/model)
