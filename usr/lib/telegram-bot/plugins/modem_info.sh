@@ -1,4 +1,3 @@
 #!/bin/sh
 
-hilink device_info
-hilink connection_info
+hilink.py device_info
