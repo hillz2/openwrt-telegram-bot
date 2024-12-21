@@ -13,7 +13,7 @@ urls = [
 def fetch_weather_data(url):
     try:
         # Send a GET request to the API
-        response = requests.get(url, timeout=3)
+        response = requests.get(url, timeout=20)
         
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
