@@ -1,3 +1,3 @@
 #!/bin/sh
 
-hilink sms list_inbox
+hilink.py list_inbox
