@@ -3,65 +3,81 @@
 import requests
 import re
 from datetime import datetime
+from collections import defaultdict
 
 # Define the URL to fetch data from
-urls = [ 
+urls = [
     'https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=33.09.20.2003',
     'https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=33.09.04.2019'
 ]
+
+# Mapping weather descriptions to emojis
+WEATHER_EMOJIS = {
+    "Hujan Ringan": "🌧",
+    "Hujan Sedang": "☔️",
+    "Hujan Lebat": "💦",
+    "Hujan Petir": "⚡"
+}
+
 # Function to fetch and process the weather data
 def fetch_weather_data(url):
     try:
         # Send a GET request to the API
-        response = requests.get(url, timeout=20)
-        
+        response = requests.get(url)
+
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
             # Parse the response JSON
             weather_data = response.json()
 
-            # Extract and format the necessary data
+            # Extract location details
             lokasi = weather_data.get("lokasi", {})
+            location_name = lokasi.get('desa', 'N/A')
+            city_name = lokasi.get('kotkab', 'N/A')
+
+            # Extract weather data
             data = weather_data.get("data", [])
+            weather_by_date = defaultdict(list)
 
-            # Print the location information
-            print(f"Location: {lokasi.get('desa', 'N/A')}")
-            print(f"City: {lokasi.get('kotkab', 'N/A')}")
-            print("-" * 50)
-
-            # Iterate through the weather data and print the required fields
+            # Process each weather item
             for item in data:
-                lokasi_data = item.get("lokasi", {})
                 cuaca = item.get("cuaca", [])
 
-                # Iterate through each hourly forecast
                 for period in cuaca:
                     for forecast in period:
-                        desa = lokasi_data.get('desa', 'N/A')
-                        local_datetime = forecast.get('local_datetime', 'N/A')
                         weather_desc = forecast.get('weather_desc', 'N/A')
                         temperature = forecast.get('t', 'N/A')
-                        analysis_date = forecast.get('analysis_date', 'N/A')
+                        local_datetime = forecast.get('local_datetime', 'N/A')
 
-                        # Filter weather descriptions that match "Hujan.*" using regex
+                        # Filter for weather descriptions matching "Hujan.*" using regex
                         if re.match(r'Hujan.*', weather_desc):
+                            # Parse and format the datetime
                             try:
-                                # Convert the local_datetime to the desired format
-                                local_datetime_obj = datetime.strptime(local_datetime, "%Y-%m-%d %H:%M:%S")
-                                formatted_local_datetime = local_datetime_obj.strftime("%d-%m-%Y %H:%M:%S")
+                                datetime_obj = datetime.strptime(local_datetime, "%Y-%m-%d %H:%M:%S")
+                                formatted_date = datetime_obj.strftime("%d-%m-%Y")
+                                formatted_time = datetime_obj.strftime("%H:%M")
                             except ValueError:
-                                formatted_local_datetime = local_datetime  # In case of invalid datetime format
+                                formatted_date = local_datetime
+                                formatted_time = ""
 
-                            # Print the formatted weather details with a bullet point
-                            print(f"• {weather_desc}. Temp: {temperature}°C at {formatted_local_datetime}")
+                            # Group weather data by date
+                            emoji = WEATHER_EMOJIS.get(weather_desc, "🌧️")
+                            weather_by_date[formatted_date].append(f"{emoji} {weather_desc}, {temperature}°C at {formatted_time}")
+
+            # Print location and city details
+            print(f"### {location_name}, {city_name}")
+            for date, weather_list in sorted(weather_by_date.items()):
+                print(f"- **{date}**")
+                for weather in weather_list:
+                    print(f"  - {weather}")
+            print()
 
         else:
             print(f"Failed to retrieve data. HTTP Status code: {response.status_code}")
-    
+
     except Exception as e:
         print(f"An error occurred: {e}")
 
 # Call the function to fetch and display the weather data
 for url in urls:
     fetch_weather_data(url)
-    print("-" * 50)
