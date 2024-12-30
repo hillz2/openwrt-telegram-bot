@@ -1,6 +1,6 @@
 #!/bin/bash
 
-model=$(cat /tmp/sysinfo/model | sed 's/[^a-zA-Z0-9_ -]//g;s/^[^ ]*/_/g')
+model=$(cat /tmp/sysinfo/model | sed $'s/[^[:print:]\t]//g')
 free_ram=$(echo "$(free | grep Mem | awk '{print $7 / 1024}')" MB)
 cpu_temperature=$(cat /sys/class/thermal/thermal_zone0/temp)
 cpu_temperature=$(echo "$(($cpu_temperature/1000)) C")
