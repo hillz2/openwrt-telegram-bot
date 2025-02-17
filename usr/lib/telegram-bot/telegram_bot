@@ -37,8 +37,8 @@ if [ ! -d "/tmp/telegram-bot" ]; then
 fi
 
 plugins="/usr/lib/telegram-bot/plugins"
-#telegram_log_file=/tmp/telegram-bot/telegram.log
-telegram_log_file=/dev/null
+telegram_log_file=/tmp/telegram.log
+#telegram_log_file=/dev/null
 offset_file=/tmp/telegram-bot/telegram_offset
 
 command_not_found="Sorry,
@@ -58,7 +58,7 @@ command_start="/cloudflared_log - cloudflared log
 */<script_name> - any scripts in the \`plugins\` directory"
 
 device_name=$(cat /tmp/sysinfo/model)
-curl -k -m 3 -s -X POST $api/sendMessage -d chat_id=$chat_id --data-urlencode text="Router started: ${device_name}" &> $telegram_log_file
+curl -k -m 3 -s -X POST $api/sendMessage -d chat_id=$chat_id --data-urlencode text="Router started: ${device_name}" >>$telegram_log_file 2>&1
 
 if [ -f "$offset_file" ] ; then
 	offset=$( cat $offset_file )
@@ -92,8 +92,8 @@ do
 			origin_ans=$(jsonfilter -s "$updates"  -e "$.result[@.update_id=$update_id].callback_query.message.chat.id")
 			if [[ "$origin" != "$chat_id" && "$origin_ans" != "$chat_id" ]];then
 				curl -k -m 3 -s -X POST $api/sendMessage -d reply_to_message_id=$msg_id -d chat_id=$origin --data-urlencode \
-					text="This is a Private bot. If you want to implement one for you, check this out https://github.com/ixiumu/openwrt-telegram-bot" &> $telegram_log_file
-				curl -k -m 3 -s -X POST $api/leaveChat -d chat_id=$origin  &> $telegram_log_file
+					text="This is a Private bot. If you want to implement one for you, check this out https://github.com/ixiumu/openwrt-telegram-bot" >>$telegram_log_file 2>&1
+				curl -k -m 3 -s -X POST $api/leaveChat -d chat_id=$origin  >>$telegram_log_file 2>&1
 			else
 				if [ $(echo "$is_a_cmd" | grep "bot_command") != "" ]; then
 					cmd=$(echo $command | awk '{print $1}')
