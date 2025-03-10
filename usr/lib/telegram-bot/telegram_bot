@@ -58,7 +58,7 @@ command_start="/cloudflared_log - cloudflared log
 */<script_name> - any scripts in the \`plugins\` directory"
 
 device_name=$(cat /tmp/sysinfo/model)
-curl -k -m 3 -s -X POST $api/sendMessage -d chat_id=$chat_id --data-urlencode text="Router started: ${device_name}" >>$telegram_log_file 2>&1
+curl -k -m 60 -s -X POST $api/sendMessage -d chat_id=$chat_id --data-urlencode text="Router started: ${device_name}" >>$telegram_log_file 2>&1
 
 if [ -f "$offset_file" ] ; then
 	offset=$( cat $offset_file )
